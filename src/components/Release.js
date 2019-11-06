@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from './Release.css';
 
 const Release = ({ title, date, image }) => {
   return (
-    <div>
+    <div className={styles.Release}>
       <h3>{title}</h3>
       <img src={image} />
       <p>{date}</p>

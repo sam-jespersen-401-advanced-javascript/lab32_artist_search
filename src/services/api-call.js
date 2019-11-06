@@ -21,16 +21,12 @@ const fetchReleases = (id, page) => {
           title: release.title,
           date: release.date,
           id: release.id,
+          image: release['cover-art-archive'].front ? `http://coverartarchive.org/release/${release.id}/front
+          ` : 'https://thumbs.gfycat.com/EthicalFoolishGrison-max-1mb.gif'
         };
       })];
     });
 };
 
-const fetchCoverArt = () => {
-  return fetch('http://coverartarchive.org/release/05e25f83-7e4c-406b-b45b-13a978809fec/front')
-    .then(res => res.json())
-    .then(console.log());
-};
-
-export { fetchArtist, fetchReleases, fetchCoverArt };
+export { fetchArtist, fetchReleases };
 
