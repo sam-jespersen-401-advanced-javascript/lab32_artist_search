@@ -45,7 +45,6 @@ export default class ArtistDisplay extends Component {
       };
     }, () => {
 
-      console.log(this.state.offset);
       if(this.state.offset + 5 >= this.state.count) {
         this.setState({ nextButton: true });
       }
