@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Artists from '../components/Artists';
 import Form from '../components/Form';
 import { fetchArtist } from '../services/api-call';
-import styles from './ArtistDisplay.css'
+import styles from './ArtistDisplay.css';
 
 export default class ArtistDisplay extends Component {
   state = {
@@ -65,6 +65,7 @@ export default class ArtistDisplay extends Component {
   render() {
     return (
       <div className={styles.ArtistDisplay}>
+        <p>Please search for your favorite musical artists</p>
         <Form
           handleSubmit={this.handleSubmit}
           handleChange={this.handleChange}

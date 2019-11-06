@@ -1,8 +1,9 @@
 .Header {
-  background-color: hotpink;
+  background-color: #6A706E;
   color:white;
-  font-family: cursive;
+  font-family: Arial, Helvetica, sans-serif;
   text-align: center;
+  padding: 1em 0 ;
   margin-top:0;
 
   h1{

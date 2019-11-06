@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ArtistDisplay component renders ArtistDisplay 1`] = `
+<div
+  className="ArtistDisplay"
+>
+  <p>
+    Please search for your favorite musical artists
+  </p>
+  <Form
+    handleChange={[Function]}
+    handleSubmit={[Function]}
+    search=""
+  />
+  <Artists
+    artistArray={Array []}
+  />
+  <button
+    disabled={true}
+    name="prev"
+    onClick={[Function]}
+  >
+    Previous
+  </button>
+  <button
+    disabled={false}
+    name="next"
+    onClick={[Function]}
+  >
+    Next
+  </button>
+</div>
+`;

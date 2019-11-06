@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Artists component renders Artists 1`] = `
+<ul
+  className="Artists"
+>
+  <Artist
+    key="Tom Petty"
+  />
+  <Artist
+    key="Frank Zappa"
+  />
+</ul>
+`;
