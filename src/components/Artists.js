@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Artist from './Artist';
+import styles from './Artists.css';
 
 const Artists = ({ artistArray }) => {
   
@@ -10,12 +11,11 @@ const Artists = ({ artistArray }) => {
       name={artist.name}
       type={artist.type}
       gender={artist.gender}
-      tags={artist.tags}
     />;
   });
 
   return (
-    <ul>
+    <ul className={styles.Artists}>
       {artists}
     </ul>
   );

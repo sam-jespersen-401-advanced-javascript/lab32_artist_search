@@ -1,0 +1,9 @@
+.Artists {
+  background-color: #89B6A5;
+  border-radius: 1em;
+  display: flex;
+  justify-content: space-evenly;
+  margin: 1em auto;
+  width: 70vw;
+  padding-inline-start: 0;
+}

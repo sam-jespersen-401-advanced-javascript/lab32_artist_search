@@ -1,0 +1,12 @@
+.Artist{
+  background-color: #4C3B4D;
+  color: #C9EDDC;
+  margin: 1em;
+  padding: 1em;
+  width: 17vw;
+  min-height: 20vh;
+
+  h3 {
+    margin: 0;
+  }
+}

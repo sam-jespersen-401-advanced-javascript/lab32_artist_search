@@ -1,0 +1,11 @@
+.Header {
+  background-color: hotpink;
+  color:white;
+  font-family: cursive;
+  text-align: center;
+  margin-top:0;
+
+  h1{
+    margin:0;
+  }
+}
