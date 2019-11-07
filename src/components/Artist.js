@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const Artist = ({ id, name, type, gender }) => {
   return (
-    <Link to={`/artists/${id}`}>
+    <Link to={`/artists/${id}/${name}`}>
       <div className={styles.Artist}>
         <h3>{name}</h3>
         <p>Type of Act: {type}</p>
