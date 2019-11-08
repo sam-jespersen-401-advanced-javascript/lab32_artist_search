@@ -1,76 +1,92 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { fetchReleases } from '../services/api-call';
 import Releases from '../components/Releases';
 import styles from './ReleaseDisplay.css';
 
-export default class ReleaseDisplay extends Component {
-  state = {
-    releases: [],
-    offset: 0,
-    count: 0,
-    nextButton: false,
-    prevButton: true
-  }
+const SET_OFFSET = 'SET_OFFSET';
+const RESET_OFFSET = 'RESET_OFFSET';
+const TOGGLE_PREV = 'TOGGLE_PREV';
+const TOGGLE_NEXT = 'TOGGLE_NEXT';
 
-  componentDidMount() {
-    this.getReleases();
-  }
 
-  getReleases = () => {
-    fetchReleases(this.props.match.params.id, this.state.offset)
+function reducer(state, action) {
+  switch(action.type) {
+    case SET_OFFSET:
+      return handleSetOffset(state, offset => offset + action.payload);
+    case RESET_OFFSET:
+      return { ...state, offset: 0 };
+    case TOGGLE_PREV:
+      return { ...state, prevButton: action.payload };
+    case TOGGLE_NEXT:
+      return { ...state, nextButton: action.payload };
+  }
+}
+
+const handleSetOffset = (state, fn) => {
+  return {
+    ...state,
+    offset: fn(state.offset)
+  };
+};
+
+const ReleaseDisplay = ({ match }) => {
+  const [releases, setReleases] = useState([]);
+  const [counts, setCounts] = useState(0);
+  const [formState, dispatch] = useReducer(reducer, { offset: 0, nextButton: false, prevButton: true });
+
+  const artistAPICall = () => {
+    fetchReleases(match.params.id, formState.offset)
       .then(releases => {
-        this.setState({ releases: releases[1], count: releases[0] });
+        setCounts(releases[0]);
+        setReleases(releases[1]);
       });
-  }
+  };
 
-  handleClick = ({ target }) => {
+  useEffect(() => {
+
+    artistAPICall();
+
+    if(counts && formState.offset + 6 >= counts) {
+      dispatch({ type: TOGGLE_NEXT, payload: true });
+    }
+    if(formState.offset === 0) {
+      dispatch({ type: TOGGLE_PREV, payload: true });
+    }
+  }, [formState.offset]);
+
+  const handleClick = ({ target }) => {
     let num;
     target.name === 'next' ? num = 6 : num = -6;
 
-    this.setState(state => {
-      return {
-        offset: state.offset + num,
-        prevButton: false,
-        nextButton: false
-      };
-    }, () => {
+    dispatch({ type: SET_OFFSET, payload: num }),
+    dispatch({ type: TOGGLE_PREV, payload: false }),
+    dispatch({ type: TOGGLE_NEXT, payload: false });
+  };
 
-      if (this.state.offset + 6 >= this.state.count) {
-        this.setState({ nextButton: true });
-      }
-      if (target.name === 'prev' && this.state.offset === 0) {
-        this.setState({ prevButton: true });
-      }
-    });
-  }
+  return (
+    <div className={styles.ReleaseDisplay}>
+      <h2>{match.params.name}</h2>
+      <button name="prev" disabled={formState.prevButton} onClick={handleClick}>Previous</button>
+      <button name="next" disabled={formState.nextButton} onClick={handleClick}>Next</button>
+      <Releases releases={releases} name={match.params.name} />
+    </div>
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.offset !== this.state.offset) {
-      this.getReleases();
-    }
-  }
+  );
+};
 
-  static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired
-      }).isRequired
+
+ReleaseDisplay.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired
     }).isRequired
-  }
+  }).isRequired
+};
 
-  render() {
-    return (
-      <div className={styles.ReleaseDisplay}>
-        <h2>{this.props.match.params.name}</h2>
-        <button name="prev" disabled={this.state.prevButton} onClick={this.handleClick}>Previous</button>
-        <button name="next" disabled={this.state.nextButton} onClick={this.handleClick}>Next</button>
-        <Releases releases={this.state.releases} name={this.props.match.params.name} />
-      </div>
 
-    );
-  }
-}
+export default ReleaseDisplay;
+
 
 
