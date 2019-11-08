@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { fetchTracks } from '../services/api-call';
 import Tracks from '../components/Tracks';
+import useTracks from '../components/hooks/useTracks';
 
 const TrackDisplay = ({ match }) => {
-  const [tracks, setTracks] = useState([]);
-
-  useEffect(() => {
-    fetchTracks(match.params.id)
-      .then(res => {
-        setTracks(res);
-      });
-  });
+  const { tracks } = useTracks({ id: match.params.id });
 
   return (
     <div>

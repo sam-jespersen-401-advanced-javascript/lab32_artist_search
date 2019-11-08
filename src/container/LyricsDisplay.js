@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { fetchLyrics } from '../services/api-call';
+import React from 'react';
 import Lyrics from '../components/Lyrics';
 import PropTypes from 'prop-types';
+import useLyrics from '../components/hooks/useLyrics';
 
 const LyricsDisplay = ({ match }) => {
-  const [lyrics, setLyrics] = useState('');
-
-  useEffect(() => {
-    fetchLyrics(match.params.name, match.params.track)
-      .then(res => {
-        setLyrics(res);
-      });
-  });
+  const { lyrics } = useLyrics({ name: match.params.name, track: match.params.track });
 
   return (
     <Lyrics lyrics={lyrics}

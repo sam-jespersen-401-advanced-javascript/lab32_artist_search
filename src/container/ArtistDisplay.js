@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import Artists from '../components/Artists';
 import Form from '../components/Form';
-import { fetchArtist } from '../services/api-call';
 import styles from './ArtistDisplay.css';
+import useArtists from '../components/hooks/useArtists';
 
 const SET_OFFSET = 'SET_OFFSET';
 const RESET_OFFSET = 'RESET_OFFSET';
@@ -31,34 +31,21 @@ const handleSetOffset = (state, fn) => {
 };
 
 const ArtistDisplay = () => {
-  const [artists, setArtists] = useState([]);
+
   const [search, setSearch] = useState('');
-  const [count, setCount] = useState(0);
-  const [formState, dispatch] = useReducer(reducer, { offset: 0, nextButton: false, prevButton: true });
+  const [formState, dispatch] = useReducer(reducer, { offset: 1, nextButton: false, prevButton: true });
 
-
-  const artistAPICall = () => {
-    fetchArtist(search, formState.offset)
-      .then(artists => {
-        setCount(artists[0]);
-        setArtists(artists[1]);
-      });
-  };
+  const { artists, count } = useArtists({ searchTerm: search, offset: formState.offset });
 
   useEffect(() => {
-    if(search) {
-      artistAPICall();
-    }
-    if(formState.offset + 5 >= count) {
+    if(count && formState.offset + 5 >= count) {
       dispatch({ type: TOGGLE_NEXT, payload: true });
     }
 
     if(formState.offset === 0) {
       dispatch({ type: TOGGLE_PREV, payload: true });
     }
-  }, [formState.offset]);
-
-
+  }, [formState.offset, count]);
 
 
   const handleSubmit = (event) => {
@@ -66,7 +53,6 @@ const ArtistDisplay = () => {
     dispatch({ type: RESET_OFFSET });
     dispatch({ type: TOGGLE_NEXT, payload: false });
     dispatch({ type: TOGGLE_PREV, payload: true });
-    artistAPICall();
   };
 
   const handleChange = ({ target }) => {

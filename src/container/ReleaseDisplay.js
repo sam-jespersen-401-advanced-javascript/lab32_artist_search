@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { fetchReleases } from '../services/api-call';
 import Releases from '../components/Releases';
 import styles from './ReleaseDisplay.css';
+import useReleases from '../components/hooks/useReleases';
 
 const SET_OFFSET = 'SET_OFFSET';
 const RESET_OFFSET = 'RESET_OFFSET';
@@ -31,23 +31,11 @@ const handleSetOffset = (state, fn) => {
 };
 
 const ReleaseDisplay = ({ match }) => {
-  const [releases, setReleases] = useState([]);
-  const [counts, setCounts] = useState(0);
   const [formState, dispatch] = useReducer(reducer, { offset: 0, nextButton: false, prevButton: true });
-
-  const artistAPICall = () => {
-    fetchReleases(match.params.id, formState.offset)
-      .then(releases => {
-        setCounts(releases[0]);
-        setReleases(releases[1]);
-      });
-  };
+  const { releases, count } = useReleases({ id: match.params.id, offset: formState.offset });
 
   useEffect(() => {
-
-    artistAPICall();
-
-    if(counts && formState.offset + 6 >= counts) {
+    if(count && formState.offset + 6 >= count) {
       dispatch({ type: TOGGLE_NEXT, payload: true });
     }
     if(formState.offset === 0) {
