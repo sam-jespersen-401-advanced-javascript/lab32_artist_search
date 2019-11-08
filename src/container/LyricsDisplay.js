@@ -1,33 +1,25 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { fetchLyrics } from '../services/api-call';
+import React from 'react';
 import Lyrics from '../components/Lyrics';
+import PropTypes from 'prop-types';
+import useLyrics from '../components/hooks/useLyrics';
 
-export default class LyricsDisplay extends Component {
-  static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        track: PropTypes.string.isRequired
-      }).isRequired
+const LyricsDisplay = ({ match }) => {
+  const { lyrics } = useLyrics({ name: match.params.name, track: match.params.track });
+
+  return (
+    <Lyrics lyrics={lyrics}
+      name={match.params.name}
+      title={match.params.track} />
+  );
+};
+
+export default LyricsDisplay;
+
+LyricsDisplay.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      track: PropTypes.string.isRequired
     }).isRequired
-  }
-
-  componentDidMount() {
-    fetchLyrics(this.props.match.params.name, this.props.match.params.track)
-      .then(res => {
-        this.setState({ lyrics: res });
-      });
-  }
-  state = {
-    lyrics: ''
-  }
-
-  render() {
-    return (
-      <Lyrics lyrics={this.state.lyrics}
-        name={this.props.match.params.name}
-        title={this.props.match.params.track} />
-    );
-  }
-}
+  }).isRequired
+};
